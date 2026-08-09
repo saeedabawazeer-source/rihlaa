@@ -10,11 +10,11 @@ import AffiliateModal from './components/AffiliateModal';
 import AffiliateSettingsModal from './components/AffiliateSettingsModal';
 import AffiliateDashboard from './components/AffiliateDashboard';
 import Footer from './components/Footer';
-import { HOTELS_DATA, VACATION_RENTALS_DATA, CAR_RENTALS_DATA } from './services/mockData';
+import { HOTELS_DATA, VACATION_RENTALS_DATA, CAR_RENTALS_DATA, EXPERIENCES_DATA, FLIGHTS_DATA } from './services/mockData';
 import { getTranslation, getDir } from './services/i18n';
 import { updateSEOMeta } from './services/seo';
 import { getUrlSearchParams } from './services/affiliateManager';
-import { LayoutGrid, Map, ArrowUpDown, Building2, Home, Car } from 'lucide-react';
+import { LayoutGrid, Map, ArrowUpDown, Building2, Home, Car, Sparkles, Plane } from 'lucide-react';
 
 export default function App() {
   // Navigation State ('catalog' | 'detail' | 'about')
@@ -62,6 +62,8 @@ export default function App() {
     if (activeTab === 'hotels') dataset = HOTELS_DATA;
     else if (activeTab === 'rentals') dataset = VACATION_RENTALS_DATA;
     else if (activeTab === 'cars') dataset = CAR_RENTALS_DATA;
+    else if (activeTab === 'experiences') dataset = EXPERIENCES_DATA;
+    else if (activeTab === 'flights') dataset = FLIGHTS_DATA;
     
     return dataset.filter(item => {
       const price = item.price || item.dailyRate || 0;
@@ -182,6 +184,8 @@ export default function App() {
                   {activeTab === 'hotels' && <Building2 color="var(--color-teal)" size={22} />}
                   {activeTab === 'rentals' && <Home color="var(--color-teal)" size={22} />}
                   {activeTab === 'cars' && <Car color="var(--color-teal)" size={22} />}
+                  {activeTab === 'experiences' && <Sparkles color="var(--color-accent)" size={22} />}
+                  {activeTab === 'flights' && <Plane color="var(--color-teal)" size={22} />}
                   
                   {selectedLocation !== 'All' ? `${selectedLocation}` : getTranslation('allDestinations', lang)}
                   <span className="brand-badge brand-badge-accent font-mono" style={{ fontSize: '0.8rem', padding: '0.2rem 0.6rem' }}>

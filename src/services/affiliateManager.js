@@ -3,6 +3,8 @@
 const DEFAULT_AFFILIATE_CONFIG = {
   travelpayoutsMarker: '762177',
   travelpayoutsTrs: '560249',
+  klookDeepLink: 'https://klook.tpx.lu/vw9vOsLH',
+  aviasalesDeepLink: 'https://aviasales.tpx.lu/g7Ibnl8a',
   bookingComAid: '304142',
   vrboAffiliateId: 'vrbo_partner_882',
   discoverCarsId: 'dc_aff_1092',
@@ -63,6 +65,14 @@ export const buildLiveSearchUrl = ({ destination = 'Paris', category = 'hotels',
 
   const destQuery = destination === 'All' ? 'Paris' : destination;
 
+  if (category === 'flights' || provider === 'Aviasales') {
+    return config.aviasalesDeepLink || 'https://aviasales.tpx.lu/g7Ibnl8a';
+  }
+
+  if (category === 'experiences' || provider === 'Klook') {
+    return config.klookDeepLink || 'https://klook.tpx.lu/vw9vOsLH';
+  }
+
   if (category === 'cars') {
     return `https://www.discovercars.com/car-rental/search?pick_up=${encodeURIComponent(destQuery)}&pickup_date=${checkIn}&dropoff_date=${checkOut}&a_aid=${config.discoverCarsId || 'dc_aff_1092'}&data1=${marker}&trs=${trs}`;
   }
@@ -84,6 +94,14 @@ export const buildAffiliateUrl = (item, configOverride = null) => {
   const urlParams = getUrlSearchParams();
   const marker = urlParams.init_marker || config.travelpayoutsMarker || '762177';
   const trs = urlParams.init_trs || config.travelpayoutsTrs || '560249';
+
+  if (item.provider === 'Aviasales' || item.category === 'flights') {
+    return config.aviasalesDeepLink || 'https://aviasales.tpx.lu/g7Ibnl8a';
+  }
+
+  if (item.provider === 'Klook' || item.category === 'experiences') {
+    return config.klookDeepLink || 'https://klook.tpx.lu/vw9vOsLH';
+  }
 
   if (!item.directUrl) {
     return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(item.locationEn || 'Paris')}&aid=${config.bookingComAid || '304142'}&marker=${marker}&trs=${trs}`;

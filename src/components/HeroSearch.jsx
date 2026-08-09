@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, MapPin, Calendar as CalendarIcon, Users, Car, Sparkles, Check, ChevronDown, ExternalLink } from 'lucide-react';
+import { Search, MapPin, Calendar as CalendarIcon, Users, Car, Sparkles, Plane, Check, ChevronDown, ExternalLink } from 'lucide-react';
 import { POPULAR_DESTINATIONS } from '../services/mockData';
 import { getTranslation } from '../services/i18n';
 import { buildLiveSearchUrl } from '../services/affiliateManager';
@@ -66,6 +66,8 @@ export default function HeroSearch({
           {activeTab === 'hotels' && getTranslation('heroTitleHotels', lang)}
           {activeTab === 'rentals' && getTranslation('heroTitleRentals', lang)}
           {activeTab === 'cars' && getTranslation('heroTitleCars', lang)}
+          {activeTab === 'experiences' && (isAr ? 'احجز أروع التجارب والأنشطة حول العالم عبر كلوك' : 'Book Top Tours & Experiences Worldwide on Klook')}
+          {activeTab === 'flights' && (isAr ? 'قارن واحجز أرخص رحلات الطيران حول العالم عبر أفياسيلز' : 'Compare & Book Cheap Flights Worldwide on Aviasales')}
         </h1>
 
         <p style={{ color: '#FFFFFF', opacity: 0.9, fontSize: '1.1rem', maxWidth: '680px', margin: '0 auto', fontWeight: 500 }}>
@@ -196,8 +198,8 @@ export default function HeroSearch({
           {/* Guests / Vehicle Filter */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
             <label style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--color-ink)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-              {activeTab === 'cars' ? <Car size={16} color="var(--color-teal)" /> : <Users size={16} color="var(--color-teal)" />}
-              {activeTab === 'cars' ? getTranslation('carType', lang) : getTranslation('guestsAndRooms', lang)}
+              {activeTab === 'cars' ? <Car size={16} color="var(--color-teal)" /> : activeTab === 'flights' ? <Plane size={16} color="var(--color-teal)" /> : <Users size={16} color="var(--color-teal)" />}
+              {activeTab === 'cars' ? getTranslation('carType', lang) : activeTab === 'flights' ? (isAr ? 'درجة السفر' : 'Cabin Class') : getTranslation('guestsAndRooms', lang)}
             </label>
             {activeTab === 'cars' ? (
               <select
@@ -220,6 +222,28 @@ export default function HeroSearch({
                 <option value="All">{isAr ? 'جميع الفئات' : 'Any Vehicle Category'}</option>
                 <option value="Electric">{isAr ? 'كهربائية / تسلا' : 'Electric / Tesla'}</option>
                 <option value="Convertible">{isAr ? 'سيارة مكشوفة فاخرة' : 'Convertible / Luxury'}</option>
+              </select>
+            ) : activeTab === 'flights' ? (
+              <select
+                id="hero-flight-class-select"
+                aria-label="Cabin Class"
+                style={{
+                  width: '100%',
+                  background: 'var(--color-paper-alt)',
+                  color: 'var(--color-ink)',
+                  border: 'var(--border-w-compact) solid var(--color-ink-border)',
+                  padding: '0.75rem 1rem',
+                  borderRadius: 'var(--radius-default)',
+                  fontSize: '0.95rem',
+                  fontWeight: 700,
+                  boxShadow: 'var(--shadow-sm)',
+                  outline: 'none',
+                  cursor: 'pointer'
+                }}
+              >
+                <option value="Economy">{isAr ? 'الدرجة السياحية' : 'Economy Class'}</option>
+                <option value="Business">{isAr ? 'درجة الأعمال' : 'Business Class'}</option>
+                <option value="First">{isAr ? 'الدرجة الأولى' : 'First Class'}</option>
               </select>
             ) : (
               <select
@@ -297,7 +321,7 @@ export default function HeroSearch({
             className="brand-btn-secondary font-mono"
             style={{ padding: '0.4rem 0.9rem', fontSize: '0.8rem', textDecoration: 'none' }}
           >
-            Direct {activeTab === 'cars' ? 'DiscoverCars' : activeTab === 'rentals' ? 'VRBO' : 'Booking.com'} Engine <ExternalLink size={14} />
+            Direct {activeTab === 'flights' ? 'Aviasales' : activeTab === 'experiences' ? 'Klook' : activeTab === 'cars' ? 'DiscoverCars' : activeTab === 'rentals' ? 'VRBO' : 'Booking.com'} Engine <ExternalLink size={14} />
           </a>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Building2, Home, Car, Moon, Sun, Settings, BarChart3, Globe } from 'lucide-react';
+import { Building2, Home, Car, Sparkles, Plane, Moon, Sun, Settings, BarChart3, Globe } from 'lucide-react';
 import RahlaaLogo from './RahlaaLogo';
 import { getTranslation } from '../services/i18n';
 
@@ -52,7 +52,8 @@ export default function Navbar({
         background: 'var(--color-paper-alt)',
         padding: '0.35rem',
         borderRadius: 'var(--radius-default)',
-        border: 'var(--border-w-compact) solid var(--color-ink-border)'
+        border: 'var(--border-w-compact) solid var(--color-ink-border)',
+        flexWrap: 'wrap'
       }}>
         <button
           id="nav-tab-hotels"
@@ -116,73 +117,116 @@ export default function Navbar({
         >
           <Car size={16} /> {getTranslation('carRentals', lang)}
         </button>
+
+        <button
+          id="nav-tab-experiences"
+          onClick={() => setActiveTab('experiences')}
+          style={{
+            background: activeTab === 'experiences' ? 'var(--color-accent)' : 'transparent',
+            color: '#131110',
+            border: activeTab === 'experiences' ? '2px solid var(--color-ink-border)' : 'none',
+            boxShadow: activeTab === 'experiences' ? '3px 3px 0px var(--color-ink-border)' : 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: 'var(--radius-default)',
+            fontWeight: 700,
+            fontSize: '0.9rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem'
+          }}
+        >
+          <Sparkles size={16} /> {lang === 'ar' ? 'أنشطة كلوك' : 'Experiences (Klook)'}
+        </button>
+
+        <button
+          id="nav-tab-flights"
+          onClick={() => setActiveTab('flights')}
+          style={{
+            background: activeTab === 'flights' ? 'var(--color-teal)' : 'transparent',
+            color: activeTab === 'flights' ? '#FFFFFF' : 'var(--color-ink)',
+            border: activeTab === 'flights' ? '2px solid var(--color-ink-border)' : 'none',
+            boxShadow: activeTab === 'flights' ? '3px 3px 0px var(--color-ink-border)' : 'none',
+            padding: '0.5rem 1rem',
+            borderRadius: 'var(--radius-default)',
+            fontWeight: 700,
+            fontSize: '0.9rem',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.4rem'
+          }}
+        >
+          <Plane size={16} /> {lang === 'ar' ? 'طيران أفياسيلز' : 'Flights (Aviasales)'}
+        </button>
       </div>
 
-      {/* Utility Actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+      {/* Control Actions (Language, Currency, Analytics, Dark Mode) */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
         
         {/* Language Switcher */}
         <button
-          id="nav-lang-switch-btn"
+          id="language-toggle-btn"
+          aria-label="Toggle language"
           className="brand-btn-secondary"
           onClick={() => setLang(lang === 'en' ? 'ar' : 'en')}
-          style={{ padding: '0.45rem 0.85rem', fontSize: '0.85rem', background: 'var(--color-paper-alt)' }}
+          style={{ padding: '0.45rem 0.8rem', fontSize: '0.85rem', fontWeight: 800 }}
         >
-          <Globe size={16} /> {lang === 'en' ? 'العربية' : 'English'}
+          <Globe size={15} /> {lang === 'en' ? 'العربية' : 'EN'}
         </button>
 
-        {/* Currency Selector */}
+        {/* Currency Switcher */}
         <select
-          id="nav-currency-select"
+          id="currency-select-dropdown"
+          aria-label="Select Currency"
           value={currency}
           onChange={(e) => setCurrency(e.target.value)}
-          className="font-mono"
           style={{
-            background: 'var(--color-paper-card)',
+            background: 'var(--color-paper-alt)',
             color: 'var(--color-ink)',
             border: 'var(--border-w-compact) solid var(--color-ink-border)',
-            padding: '0.45rem 0.75rem',
+            padding: '0.45rem 0.6rem',
             borderRadius: 'var(--radius-default)',
             fontSize: '0.85rem',
             fontWeight: 700,
-            cursor: 'pointer',
-            boxShadow: '3px 3px 0px var(--color-ink-border)',
-            outline: 'none'
+            outline: 'none',
+            cursor: 'pointer'
           }}
         >
-          {currencies.map(curr => (
-            <option key={curr} value={curr}>{curr}</option>
+          {currencies.map(c => (
+            <option key={c} value={c}>{c}</option>
           ))}
         </select>
 
-        {/* Analytics Hub */}
+        {/* Analytics Dashboard Button */}
         <button
-          id="nav-dashboard-btn"
+          id="analytics-dashboard-btn"
+          aria-label="Analytics Dashboard"
           className="brand-btn-secondary"
           onClick={onOpenDashboard}
-          title={getTranslation('analytics', lang)}
-          style={{ padding: '0.45rem 0.85rem', fontSize: '0.85rem' }}
+          style={{ padding: '0.45rem 0.75rem', fontSize: '0.85rem' }}
         >
-          <BarChart3 size={16} color="var(--color-teal)" />
+          <BarChart3 size={16} />
         </button>
 
-        {/* Settings */}
+        {/* Settings Modal Button */}
         <button
-          id="nav-settings-btn"
+          id="affiliate-settings-btn"
+          aria-label="Affiliate Settings"
           className="brand-btn-secondary"
           onClick={onOpenSettings}
-          title={getTranslation('settings', lang)}
-          style={{ padding: '0.45rem 0.85rem', fontSize: '0.85rem' }}
+          style={{ padding: '0.45rem 0.75rem', fontSize: '0.85rem' }}
         >
           <Settings size={16} />
         </button>
 
-        {/* Dark/Light Toggle */}
+        {/* Dark Mode Toggle */}
         <button
-          id="nav-darkmode-toggle-btn"
+          id="theme-toggle-btn"
+          aria-label="Toggle Dark Mode"
           className="brand-btn-secondary"
           onClick={() => setDarkMode(!darkMode)}
-          style={{ padding: '0.45rem 0.85rem' }}
+          style={{ padding: '0.45rem 0.75rem', fontSize: '0.85rem' }}
         >
           {darkMode ? <Sun size={16} color="var(--color-accent)" /> : <Moon size={16} />}
         </button>
