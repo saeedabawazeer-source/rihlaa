@@ -1,24 +1,50 @@
 // Affiliate Program & Referral Link Manager — Rahlaa Brand
 
 const DEFAULT_AFFILIATE_CONFIG = {
-  travelpayoutsMarker: '492815',
+  travelpayoutsMarker: '762177',
+  travelpayoutsTrs: '560249',
   bookingComAid: '304142',
   vrboAffiliateId: 'vrbo_partner_882',
   discoverCarsId: 'dc_aff_1092',
   agodaCid: '1892019',
   stay22ApiKey: 'stay22_demo_key',
-  mode: 'demo'
+  mode: 'live'
 };
 
 const STORAGE_KEY = 'rahlaa_affiliate_settings';
 const LOGS_STORAGE_KEY = 'rahlaa_click_logs';
 
+export const getUrlSearchParams = () => {
+  if (typeof window === 'undefined') return {};
+  try {
+    const params = new URLSearchParams(window.location.search);
+    return {
+      init_marker: params.get('init_marker') || params.get('marker') || null,
+      init_trs: params.get('init_trs') || params.get('trs') || null,
+      init_locale: params.get('init_locale') || params.get('locale') || null
+    };
+  } catch (e) {
+    return {};
+  }
+};
+
 export const getAffiliateConfig = () => {
+  const urlParams = getUrlSearchParams();
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : DEFAULT_AFFILIATE_CONFIG;
+    const parsed = saved ? JSON.parse(saved) : DEFAULT_AFFILIATE_CONFIG;
+    
+    // Override with URL parameters if present in query string
+    if (urlParams.init_marker) parsed.travelpayoutsMarker = urlParams.init_marker;
+    if (urlParams.init_trs) parsed.travelpayoutsTrs = urlParams.init_trs;
+
+    return parsed;
   } catch (e) {
-    return DEFAULT_AFFILIATE_CONFIG;
+    return {
+      ...DEFAULT_AFFILIATE_CONFIG,
+      travelpayoutsMarker: urlParams.init_marker || DEFAULT_AFFILIATE_CONFIG.travelpayoutsMarker,
+      travelpayoutsTrs: urlParams.init_trs || DEFAULT_AFFILIATE_CONFIG.travelpayoutsTrs
+    };
   }
 };
 
@@ -32,10 +58,12 @@ export const saveAffiliateConfig = (config) => {
 
 export const buildAffiliateUrl = (item, configOverride = null) => {
   const config = configOverride || getAffiliateConfig();
-  const marker = config.travelpayoutsMarker || '492815';
+  const urlParams = getUrlSearchParams();
+  const marker = urlParams.init_marker || config.travelpayoutsMarker || '762177';
+  const trs = urlParams.init_trs || config.travelpayoutsTrs || '560249';
 
   if (!item.directUrl) {
-    return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(item.locationEn || 'Paris')}&aid=${config.bookingComAid || '304142'}`;
+    return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(item.locationEn || 'Paris')}&aid=${config.bookingComAid || '304142'}&marker=${marker}&trs=${trs}`;
   }
 
   try {
@@ -45,26 +73,30 @@ export const buildAffiliateUrl = (item, configOverride = null) => {
       case 'Booking.com':
         url.searchParams.set('aid', config.bookingComAid || '304142');
         url.searchParams.set('marker', marker);
+        url.searchParams.set('trs', trs);
         url.searchParams.set('subId', item.category || 'travel');
         break;
 
       case 'VRBO':
         url.searchParams.set('aff_id', config.vrboAffiliateId || 'vrbo_partner_882');
         url.searchParams.set('camref', marker);
+        url.searchParams.set('trs', trs);
         break;
 
       case 'DiscoverCars':
         url.searchParams.set('a_aid', config.discoverCarsId || 'dc_aff_1092');
         url.searchParams.set('data1', marker);
+        url.searchParams.set('trs', trs);
         break;
 
       case 'Agoda':
         url.searchParams.set('cid', config.agodaCid || '1892019');
         url.searchParams.set('tag', marker);
+        url.searchParams.set('trs', trs);
         break;
 
       default:
-        return `https://tp.media/r?marker=${marker}&p=5055&u=${encodeURIComponent(item.directUrl)}`;
+        return `https://tp.media/r?marker=${marker}&trs=${trs}&p=5055&u=${encodeURIComponent(item.directUrl)}`;
     }
 
     return url.toString();
@@ -75,6 +107,7 @@ export const buildAffiliateUrl = (item, configOverride = null) => {
 
 export const trackAffiliateClick = (item) => {
   const config = getAffiliateConfig();
+  const urlParams = getUrlSearchParams();
   const logEntry = {
     id: 'log_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
     timestamp: new Date().toISOString(),
@@ -84,7 +117,8 @@ export const trackAffiliateClick = (item) => {
     provider: item.provider || 'Booking.com',
     price: item.price || 150,
     estimatedCommission: Math.round((item.price || 150) * 0.08 * 100) / 100,
-    marker: config.travelpayoutsMarker
+    marker: urlParams.init_marker || config.travelpayoutsMarker,
+    trs: urlParams.init_trs || config.travelpayoutsTrs
   };
 
   try {

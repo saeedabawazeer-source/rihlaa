@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import { HOTELS_DATA, VACATION_RENTALS_DATA, CAR_RENTALS_DATA } from './services/mockData';
 import { getTranslation, getDir } from './services/i18n';
 import { updateSEOMeta } from './services/seo';
+import { getUrlSearchParams } from './services/affiliateManager';
 import { LayoutGrid, Map, ArrowUpDown, Building2, Home, Car } from 'lucide-react';
 
 export default function App() {
@@ -22,7 +23,10 @@ export default function App() {
   const [viewMode, setViewMode] = useState('grid');
   const [darkMode, setDarkMode] = useState(false);
   const [currency, setCurrency] = useState('USD $');
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState(() => {
+    const urlParams = getUrlSearchParams();
+    return (urlParams.init_locale === 'ar' || urlParams.init_locale === 'en') ? urlParams.init_locale : 'en';
+  });
 
   // Selected Property for Full Detail Page
   const [selectedProperty, setSelectedProperty] = useState(null);
@@ -196,7 +200,7 @@ export default function App() {
                       borderRadius: 'var(--radius-default)',
                       fontSize: '0.85rem',
                       fontWeight: 700,
-                      boxShadow: '2px 2px 0px var(--color-ink-border)',
+                      boxShadow: 'var(--shadow-sm)',
                       outline: 'none',
                       cursor: 'pointer'
                     }}
