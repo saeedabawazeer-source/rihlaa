@@ -5,6 +5,7 @@ const DEFAULT_AFFILIATE_CONFIG = {
   travelpayoutsTrs: '560249',
   klookDeepLink: 'https://klook.tpx.lu/vw9vOsLH',
   aviasalesDeepLink: 'https://aviasales.tpx.lu/g7Ibnl8a',
+  wegotripDeepLink: 'https://wegotrip.tpx.lu/NgUh3IDr',
   bookingComAid: '304142',
   vrboAffiliateId: 'vrbo_partner_882',
   discoverCarsId: 'dc_aff_1092',
@@ -65,6 +66,10 @@ export const buildLiveSearchUrl = ({ destination = 'Paris', category = 'hotels',
 
   const destQuery = destination === 'All' ? 'Paris' : destination;
 
+  if (provider === 'WeGoTrip') {
+    return config.wegotripDeepLink || 'https://wegotrip.tpx.lu/NgUh3IDr';
+  }
+
   if (category === 'flights' || provider === 'Aviasales') {
     return config.aviasalesDeepLink || 'https://aviasales.tpx.lu/g7Ibnl8a';
   }
@@ -94,6 +99,10 @@ export const buildAffiliateUrl = (item, configOverride = null) => {
   const urlParams = getUrlSearchParams();
   const marker = urlParams.init_marker || config.travelpayoutsMarker || '762177';
   const trs = urlParams.init_trs || config.travelpayoutsTrs || '560249';
+
+  if (item.provider === 'WeGoTrip') {
+    return config.wegotripDeepLink || 'https://wegotrip.tpx.lu/NgUh3IDr';
+  }
 
   if (item.provider === 'Aviasales' || item.category === 'flights') {
     return config.aviasalesDeepLink || 'https://aviasales.tpx.lu/g7Ibnl8a';
