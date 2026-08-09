@@ -1,0 +1,242 @@
+/* Rahlaa (رحلاء) Design System — Built per brand-system skill guidelines */
+
+:root {
+  --color-ink: #131110;
+  --color-ink-border: #000000;
+  --color-shadow-ink: #0d1f24;
+  --color-paper: #F6EFE3;
+  --color-paper-card: #FFFFFF;
+  --color-paper-alt: #EFE6D5;
+
+  /* Teal Anchor Color (canonical across brand family) */
+  --color-teal: #0B7A75;
+  --color-teal-light: #17A099;
+  --color-teal-dark: #07514D;
+
+  /* Rahlaa Brand-Specific Warm Accent (Coral Amber) */
+  --color-accent: #FF7A00;
+  --color-accent-light: #FF9633;
+  --color-accent-dark: #D66200;
+
+  /* Supporting Functional Accents */
+  --color-emerald: #06D6A0;
+  --color-rose: #EF476F;
+  --color-purple: #CDB4DB;
+
+  --border-w-compact: 2px;
+  --border-w-primary: 3px;
+
+  /* Utility Shadow Scale */
+  --shadow-sm: 2px 2px 0px var(--color-shadow-ink);
+  --shadow-md: 4px 4px 0px var(--color-shadow-ink);
+  --shadow-lg: 6px 6px 0px var(--color-shadow-ink);
+  --shadow-dramatic: 12px 12px 0px currentColor;
+
+  --radius-default: 8px;
+  --radius-pill: 9999px;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  --font-arabic: "Cairo", sans-serif;
+
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+[data-theme="dark"] {
+  --color-paper: #18171C;
+  --color-paper-card: #23222A;
+  --color-paper-alt: #2D2B36;
+  --color-ink: #F6EFE3;
+  --color-ink-border: #F6EFE3;
+  --color-shadow-ink: #F6EFE3;
+  --shadow-dramatic: 12px 12px 0px currentColor;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  min-height: 100vh;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+[dir="rtl"] {
+  font-family: var(--font-arabic);
+  text-align: right;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+}
+
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3, [dir="rtl"] h4, [dir="rtl"] h5, [dir="rtl"] h6 {
+  font-family: var(--font-arabic);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Card Component Primitive */
+.brand-card {
+  background: var(--color-paper-card);
+  border: var(--border-w-primary) solid var(--color-ink-border);
+  border-radius: var(--radius-default);
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s var(--ease-bounce), box-shadow 0.2s var(--ease-bounce);
+}
+
+.brand-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.brand-card:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--color-shadow-ink);
+}
+
+/* Button Primitives (Enforcing 44px minimum tap height for accessibility) */
+.brand-btn-primary {
+  background: var(--color-accent);
+  color: #131110;
+  font-weight: 700;
+  font-family: var(--font-display);
+  padding: 0.75rem 1.4rem;
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: var(--radius-default);
+  border: var(--border-w-primary) solid var(--color-ink-border);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.15s var(--ease-bounce);
+  text-decoration: none;
+}
+
+.brand-btn-primary:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--shadow-md);
+  background: var(--color-accent-light);
+}
+
+.brand-btn-primary:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--color-ink-border);
+}
+
+.brand-btn-secondary {
+  background: var(--color-paper-card);
+  color: var(--color-ink);
+  border: var(--border-w-compact) solid var(--color-ink-border);
+  box-shadow: var(--shadow-sm);
+  font-weight: 700;
+  padding: 0.65rem 1.1rem;
+  min-height: 44px;
+  min-width: 44px;
+  border-radius: var(--radius-default);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  transition: all 0.15s var(--ease-bounce);
+}
+
+.brand-btn-secondary:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Form Inputs & Selects Tap Targets */
+input, select, textarea {
+  min-height: 44px;
+}
+
+/* Badge Stamp */
+.brand-badge {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  border: var(--border-w-compact) solid var(--color-ink-border);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--color-paper-alt);
+  color: var(--color-ink);
+  box-shadow: 1.5px 1.5px 0px var(--color-ink-border);
+}
+
+.brand-badge-accent {
+  background: var(--color-accent);
+  color: #131110;
+}
+
+.brand-badge-teal {
+  background: var(--color-teal);
+  color: #FFFFFF;
+}
+
+/* Full-Bleed Section Utility Classes */
+.section-teal { background: var(--color-teal); color: #FFFFFF; border-bottom: var(--border-w-primary) solid var(--color-ink-border); }
+.section-accent { background: var(--color-accent); color: #131110; border-bottom: var(--border-w-primary) solid var(--color-ink-border); }
+.section-ink { background: var(--color-ink); color: var(--color-paper); border-bottom: var(--border-w-primary) solid var(--color-paper); }
+
+.section-teal .brand-card, .section-accent .brand-card, .section-ink .brand-card {
+  background: var(--color-paper-card);
+  color: var(--color-ink);
+  box-shadow: var(--shadow-dramatic);
+}
+
+.section-teal .brand-badge { background: rgba(255,255,255,0.2); color: #fff; border-color: rgba(255,255,255,0.4); }
+
+/* Responsive Grid Stacking for Mobile (<768px) */
+.catalog-main-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 300px) 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .catalog-main-layout {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 9px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-paper);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-teal);
+  border: 2px solid var(--color-ink-border);
+  border-radius: var(--radius-pill);
+}
+
+/* Loading Spin Animation */
+@keyframes spin { to { transform: rotate(360deg); } }
+.animate-spin { animation: spin 1s linear infinite; }

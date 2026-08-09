@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <title>Rahlaa (رحلاء) | Hotels, Vacation Rentals & Car Hire</title>
+    <meta name="description" content="Rahlaa (رحلاء) - Discover & compare live deals on luxury hotels, vacation rentals, Airbnb alternatives, and car hire worldwide." />
+    
+    <!-- OpenGraph & Twitter Social Tags -->
+    <meta property="og:title" content="Rahlaa (رحلاء) | Wander Further" />
+    <meta property="og:description" content="Compare live travel deals across Booking.com, VRBO, DiscoverCars, Agoda, and Stay22 with direct referral tracking." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://rahlaa.com" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Rahlaa (رحلاء) | Wander Further" />
+    <meta name="twitter:description" content="Bilingual Travel & Rental Affiliate Comparison Platform" />
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80" />
+
+    <!-- Google Fonts: Space Grotesk, JetBrains Mono, Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Leaflet.js Interactive Map Engine CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Schema.org JSON-LD Single Source of Truth -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TravelAgency",
+      "name": "Rahlaa",
+      "alternateName": "رحلاء",
+      "description": "Bilingual Travel & Rental Affiliate Comparison Platform",
+      "url": "https://rahlaa.com",
+      "image": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "SA"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://rahlaa.com/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
