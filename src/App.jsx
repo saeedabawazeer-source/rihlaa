@@ -151,7 +151,15 @@ export default function App() {
             setSelectedLocation={setSelectedLocation}
             guests={guests}
             setGuests={setGuests}
-            onSearchSubmit={() => {}}
+            onSearchSubmit={(query) => {
+              if (query && query.destination) {
+                setSelectedLocation(query.destination);
+              }
+              const mainCatalog = document.querySelector('main');
+              if (mainCatalog) {
+                mainCatalog.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
             lang={lang}
           />
 

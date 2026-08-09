@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Search, MapPin, Calendar as CalendarIcon, Users, Car, Sparkles, Check, ChevronDown } from 'lucide-react';
+import { Search, MapPin, Calendar as CalendarIcon, Users, Car, Sparkles, Check, ChevronDown, ExternalLink } from 'lucide-react';
 import { POPULAR_DESTINATIONS } from '../services/mockData';
 import { getTranslation } from '../services/i18n';
+import { buildLiveSearchUrl } from '../services/affiliateManager';
 
 export default function HeroSearch({
   activeTab,
@@ -21,6 +22,26 @@ export default function HeroSearch({
 
   const formattedCheckIn = new Date(checkInDate).toLocaleDateString(isAr ? 'ar-SA' : 'en-US', { month: 'short', day: 'numeric' });
   const formattedCheckOut = new Date(checkOutDate).toLocaleDateString(isAr ? 'ar-SA' : 'en-US', { month: 'short', day: 'numeric' });
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (onSearchSubmit) {
+      onSearchSubmit({
+        destination: selectedLocation,
+        checkIn: checkInDate,
+        checkOut: checkOutDate,
+        guests
+      });
+    }
+  };
+
+  const directPartnerUrl = buildLiveSearchUrl({
+    destination: selectedLocation,
+    category: activeTab,
+    checkIn: checkInDate,
+    checkOut: checkOutDate,
+    guests
+  });
 
   return (
     <div className="section-teal" style={{
@@ -62,7 +83,7 @@ export default function HeroSearch({
         boxShadow: 'var(--shadow-dramatic)',
         position: 'relative'
       }}>
-        <form onSubmit={(e) => { e.preventDefault(); onSearchSubmit(); }} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', alignItems: 'end' }}>
+        <form onSubmit={handleFormSubmit} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', alignItems: 'end' }}>
           
           {/* Destination Selector */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
@@ -123,7 +144,7 @@ export default function HeroSearch({
                 justifyContent: 'space-between'
               }}
             >
-              <span>{formattedCheckIn} - {formattedCheckOut} (7 {isAr ? 'ليال' : 'nights'})</span>
+              <span>{formattedCheckIn} - {formattedCheckOut}</span>
               <ChevronDown size={16} />
             </button>
 
@@ -233,55 +254,51 @@ export default function HeroSearch({
           </button>
         </form>
 
-        {/* Quick Destination Pills */}
+        {/* Live Direct Partner Link Bar */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '0.6rem',
+          justifyContent: 'space-between',
           marginTop: '1.25rem',
+          paddingTop: '1rem',
+          borderTop: 'var(--border-w-compact) solid var(--color-ink-border)',
           flexWrap: 'wrap',
-          fontSize: '0.85rem'
+          gap: '0.75rem'
         }}>
-          <span style={{ fontWeight: 800 }}>{getTranslation('popular', lang)}</span>
-          {POPULAR_DESTINATIONS.map(dest => (
-            <button
-              key={dest.id}
-              id={`hero-quick-dest-${dest.id}`}
-              aria-label={`Select ${dest.nameEn}`}
-              onClick={() => setSelectedLocation(dest.nameEn)}
-              style={{
-                background: selectedLocation === dest.nameEn ? 'var(--color-accent)' : 'var(--color-paper-alt)',
-                color: 'var(--color-ink)',
-                border: 'var(--border-w-compact) solid var(--color-ink-border)',
-                padding: '0.3rem 0.8rem',
-                borderRadius: 'var(--radius-pill)',
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                cursor: 'pointer',
-                boxShadow: selectedLocation === dest.nameEn ? '3px 3px 0px var(--color-ink-border)' : '1px 1px 0px var(--color-ink-border)'
-              }}
-            >
-              {isAr ? dest.nameAr : dest.nameEn}
-            </button>
-          ))}
-          {selectedLocation !== 'All' && (
-            <button
-              id="hero-clear-filter-btn"
-              aria-label={getTranslation('clearFilter', lang)}
-              onClick={() => setSelectedLocation('All')}
-              style={{
-                background: 'transparent',
-                color: 'var(--color-accent)',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '0.8rem',
-                fontWeight: 800,
-                textDecoration: 'underline'
-              }}
-            >
-              {getTranslation('clearFilter', lang)}
-            </button>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap', fontSize: '0.85rem' }}>
+            <span style={{ fontWeight: 800 }}>{getTranslation('popular', lang)}</span>
+            {POPULAR_DESTINATIONS.map(dest => (
+              <button
+                key={dest.id}
+                id={`hero-quick-dest-${dest.id}`}
+                aria-label={`Select ${dest.nameEn}`}
+                onClick={() => setSelectedLocation(dest.nameEn)}
+                style={{
+                  background: selectedLocation === dest.nameEn ? 'var(--color-accent)' : 'var(--color-paper-alt)',
+                  color: 'var(--color-ink)',
+                  border: 'var(--border-w-compact) solid var(--color-ink-border)',
+                  padding: '0.3rem 0.8rem',
+                  borderRadius: 'var(--radius-pill)',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  boxShadow: selectedLocation === dest.nameEn ? '3px 3px 0px var(--color-ink-border)' : '1px 1px 0px var(--color-ink-border)'
+                }}
+              >
+                {isAr ? dest.nameAr : dest.nameEn}
+              </button>
+            ))}
+          </div>
+
+          <a
+            href={directPartnerUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="brand-btn-secondary font-mono"
+            style={{ padding: '0.4rem 0.9rem', fontSize: '0.8rem', textDecoration: 'none' }}
+          >
+            Direct {activeTab === 'cars' ? 'DiscoverCars' : activeTab === 'rentals' ? 'VRBO' : 'Booking.com'} Engine <ExternalLink size={14} />
+          </a>
         </div>
       </div>
     </div>

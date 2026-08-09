@@ -34,7 +34,6 @@ export const getAffiliateConfig = () => {
     const saved = localStorage.getItem(STORAGE_KEY);
     const parsed = saved ? JSON.parse(saved) : DEFAULT_AFFILIATE_CONFIG;
     
-    // Override with URL parameters if present in query string
     if (urlParams.init_marker) parsed.travelpayoutsMarker = urlParams.init_marker;
     if (urlParams.init_trs) parsed.travelpayoutsTrs = urlParams.init_trs;
 
@@ -54,6 +53,30 @@ export const saveAffiliateConfig = (config) => {
   } catch (e) {
     console.error('Failed to save affiliate settings:', e);
   }
+};
+
+export const buildLiveSearchUrl = ({ destination = 'Paris', category = 'hotels', checkIn = '2026-08-15', checkOut = '2026-08-22', guests = 2, provider = 'Booking.com' }) => {
+  const config = getAffiliateConfig();
+  const urlParams = getUrlSearchParams();
+  const marker = urlParams.init_marker || config.travelpayoutsMarker || '762177';
+  const trs = urlParams.init_trs || config.travelpayoutsTrs || '560249';
+
+  const destQuery = destination === 'All' ? 'Paris' : destination;
+
+  if (category === 'cars') {
+    return `https://www.discovercars.com/car-rental/search?pick_up=${encodeURIComponent(destQuery)}&pickup_date=${checkIn}&dropoff_date=${checkOut}&a_aid=${config.discoverCarsId || 'dc_aff_1092'}&data1=${marker}&trs=${trs}`;
+  }
+
+  if (category === 'rentals') {
+    return `https://www.vrbo.com/search?destination=${encodeURIComponent(destQuery)}&filter_guests=${guests}&aff_id=${config.vrboAffiliateId || 'vrbo_partner_882'}&camref=${marker}&trs=${trs}`;
+  }
+
+  if (provider === 'Agoda') {
+    return `https://www.agoda.com/search?city=${encodeURIComponent(destQuery)}&checkIn=${checkIn}&checkOut=${checkOut}&adults=${guests}&cid=${config.agodaCid || '1892019'}&tag=${marker}&trs=${trs}`;
+  }
+
+  // Default Booking.com Hotel Search
+  return `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(destQuery)}&checkin=${checkIn}&checkout=${checkOut}&group_adults=${guests}&aid=${config.bookingComAid || '304142'}&marker=${marker}&trs=${trs}`;
 };
 
 export const buildAffiliateUrl = (item, configOverride = null) => {
@@ -111,8 +134,8 @@ export const trackAffiliateClick = (item) => {
   const logEntry = {
     id: 'log_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
     timestamp: new Date().toISOString(),
-    itemId: item.id,
-    title: item.titleEn || item.titleAr || item.title || '',
+    itemId: item.id || 'search_' + Date.now(),
+    title: item.titleEn || item.titleAr || item.title || item.locationEn || 'Search Result',
     category: item.category || 'hotels',
     provider: item.provider || 'Booking.com',
     price: item.price || 150,
